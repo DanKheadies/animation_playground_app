@@ -16,11 +16,12 @@ class _BouncingBallState extends State<BouncingBall>
   late final Ticker _ticker;
   double _vx = 5, _vy = 5, _x = 170, _y = 400;
   final _ballWidth = 30, _ballHeight = 30;
+  late final Timer ballTimer;
 
   @override
   void initState() {
     super.initState();
-    Timer(
+    ballTimer = Timer(
       const Duration(microseconds: 300),
       () {
         final size = MediaQuery.of(context).size;
@@ -46,8 +47,9 @@ class _BouncingBallState extends State<BouncingBall>
 
   @override
   void dispose() {
-    super.dispose();
+    ballTimer.cancel();
     _ticker.dispose();
+    super.dispose();
   }
 
   @override

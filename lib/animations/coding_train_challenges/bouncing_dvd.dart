@@ -13,11 +13,11 @@ class BouncingDVD extends StatefulWidget {
 class _BouncingDVDState extends State<BouncingDVD> {
   Random random = Random();
   Color dvdColor = Colors.pink;
-  double dvdWidth = 150, dvdHeight = 80;
+  double dvdWidth = 150, dvdHeight = 76.5; // 80, 76.5
   double x = 90, y = 30, xSpeed = 50, ySpeed = 50, speed = 150;
 
   late final Timer bounceTimer;
-  late final Timer colorTimer;
+  late Timer colorTimer;
 
   @override
   void initState() {
@@ -44,7 +44,7 @@ class _BouncingDVDState extends State<BouncingDVD> {
       Duration(milliseconds: speed.toInt()),
       (timer) {
         double screenWidth = MediaQuery.of(context).size.width;
-        double screenHeight = MediaQuery.of(context).size.height;
+        double screenHeight = MediaQuery.of(context).size.height - 56;
         x += xSpeed;
         y += ySpeed;
 

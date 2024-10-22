@@ -74,6 +74,11 @@ List animationList = [
     icon: Icons.format_paint,
   ),
   AnimationPage(
+    title: 'Language Learning with Pixels',
+    route: '/language-learning-with-pixels',
+    icon: Icons.abc,
+  ),
+  AnimationPage(
     title: 'Segmented bar Flip animation',
     route: '/segmented-bar-flip-animation',
     icon: Icons.tab,

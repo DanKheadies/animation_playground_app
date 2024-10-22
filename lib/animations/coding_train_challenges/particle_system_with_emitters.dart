@@ -40,7 +40,11 @@ class _ParticleSystemWithEmittersState extends State<ParticleSystemWithEmitters>
         title: const Text('Tap on the screen to display Particles'),
       ),
       body: GestureDetector(
-        onTapDown: (details) {},
+        onTapDown: (details) {
+          if (emitters.length < 38) {
+            emitters.add(Emitter(position: details.localPosition));
+          }
+        },
         child: SizedBox(
           height: size.height,
           width: size.width,

@@ -1,4 +1,3 @@
-import 'dart:core';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
@@ -13,24 +12,10 @@ class PaintingWithPixels extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    print(size.aspectRatio);
 
-    return size.aspectRatio.abs() <= 0.75
-        ? PaintingWithPixelsCanvas(
-            screenSize: size,
-          )
-        : Scaffold(
-            appBar: AppBar(title: const Text('Painting With Pixels (Error)')),
-            backgroundColor: Colors.white,
-            body: const Center(
-              child: Text(
-                'Screen resolution won\'t work.',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-            ),
-          );
+    return PaintingWithPixelsCanvas(
+      screenSize: size,
+    );
   }
 }
 
@@ -60,13 +45,10 @@ class _PaintingWithPixelsCanvasState extends State<PaintingWithPixelsCanvas>
   @override
   void initState() {
     super.initState();
-
     loadImage();
     _ticker = createTicker((elapsed) {
       if (!_loading) {
-        // "speed"
-        for (int i = 1; i < 10; i++) {
-          // 100
+        for (int i = 1; i < 100; i++) {
           randomizePoints();
         }
       }
@@ -76,7 +58,7 @@ class _PaintingWithPixelsCanvasState extends State<PaintingWithPixelsCanvas>
   }
 
   void loadImage() async {
-    var data = await rootBundle.load('assets/images/romanji-a.jpg');
+    var data = await rootBundle.load('assets/images/i-spy.jpeg');
     final buffer = data.buffer;
     var bytes = buffer.asUint8List(
       data.offsetInBytes,
@@ -84,6 +66,7 @@ class _PaintingWithPixelsCanvasState extends State<PaintingWithPixelsCanvas>
     );
     image = await decodeImageFromList(bytes);
     imagePixels = img.decodeJpg(bytes)!;
+    // TODO: height cap
     imagePixels = img.copyResize(
       imagePixels,
       width: widget.screenSize.width.floor(),
@@ -98,13 +81,7 @@ class _PaintingWithPixelsCanvasState extends State<PaintingWithPixelsCanvas>
     int x = _random.nextInt(imagePixels.width);
     int y = _random.nextInt(imagePixels.height);
 
-    // print(widget.screenSize.height); // 964
-    // print(imagePixels.height); // 663
-    // var positionBottom = widget.screenSize.height - imagePixels.height;
-    // print(positionBottom); // 301
-
-    Offset offset = Offset(x.toDouble(), (y).toDouble());
-
+    Offset offset = Offset(x.toDouble(), y.toDouble());
     if (!offsets.contains(offset)) {
       offsets.add(offset);
     } else {
@@ -121,94 +98,24 @@ class _PaintingWithPixelsCanvasState extends State<PaintingWithPixelsCanvas>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(),
+      appBar: AppBar(title: const Text('Painting With Pixels')),
       backgroundColor: Colors.white,
       body: _loading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : Container(
-              color: Colors.green,
-              width: widget.screenSize.width,
-              height: widget.screenSize.height - appBar().preferredSize.height,
-              child: Stack(
-                children: [
-                  Container(
-                    color: Colors.red,
-                    height: widget.screenSize.height -
-                        imagePixels.height -
-                        appBar().preferredSize.height -
-                        60 - // for the actions / buttons
-                        10, // avoids the circles being painted via diameter
-                    width: widget.screenSize.width,
-                    child: const Center(
-                      child: Text('Instructions...'),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(
-                      top: widget.screenSize.height -
-                          imagePixels.height -
-                          appBar().preferredSize.height -
-                          60 -
-                          0,
-                    ),
-                    // color: Colors.yellow,
-                    child: CustomPaint(
-                      painter: _PixelPainter(
-                        // image: image,
-                        imagePixels: imagePixels,
-                        offsets: offsets,
-                      ),
-                      child: SizedBox(
-                        // height: widget.screenSize.height,
-                        height: imagePixels.height.toDouble(),
-                        // width: widget.screenSize.width,
-                        width: imagePixels.width.toDouble(),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: widget.screenSize.height -
-                        appBar().preferredSize.height -
-                        60, // Actions/ buttons size
-                    child: Container(
-                      color: Colors.blue,
-                      height: 60,
-                      width: widget.screenSize.width,
-                      child: const Center(
-                        child: Text('Actions / Buttons'),
-                      ),
-                    ),
-                  ),
-                ],
+          ? const SizedBox.shrink()
+          : Center(
+              child: CustomPaint(
+                painter: _PixelPainter(
+                  // image: image,
+                  imagePixels: imagePixels,
+                  offsets: offsets,
+                ),
+                child: SizedBox(
+                  height: widget.screenSize.height,
+                  width: widget.screenSize.width,
+                ),
               ),
             ),
-      // : Padding(
-      //     padding: EdgeInsets.only(
-      //       top: widget.screenSize.height -
-      //           imagePixels.height -
-      //           appBar().preferredSize.height,
-      //     ),
-      //     child: CustomPaint(
-      //       painter: _PixelPainter(
-      //         // image: image,
-      //         imagePixels: imagePixels,
-      //         offsets: offsets,
-      //       ),
-      //       child: SizedBox(
-      //         // height: widget.screenSize.height,
-      //         height: imagePixels.height.toDouble(),
-      //         // width: widget.screenSize.width,
-      //         width: imagePixels.width.toDouble(),
-      //       ),
-      //     ),
-      //   ),
     );
-  }
-
-  AppBar appBar() {
-    return AppBar(title: const Text('Painting With Pixels'));
   }
 }
 
@@ -233,7 +140,7 @@ class _PixelPainter extends CustomPainter {
       List colorList = pixel.toList();
       canvas.drawCircle(
         offset,
-        5, // 3
+        3,
         Paint()
           ..color = Color.fromARGB(
             255,

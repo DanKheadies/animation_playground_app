@@ -3,14 +3,33 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_shaders/flutter_shaders.dart';
 
-class MetaballFAB extends StatefulWidget {
+class MetaballFAB extends StatelessWidget {
   const MetaballFAB({super.key});
 
   @override
-  State<MetaballFAB> createState() => _MetaballFABState();
+  Widget build(BuildContext context) {
+    return MetaballFABCanvas(
+      pixelRatio: View.of(context).devicePixelRatio,
+      viewSize: View.of(context).physicalSize,
+    );
+  }
 }
 
-class _MetaballFABState extends State<MetaballFAB>
+class MetaballFABCanvas extends StatefulWidget {
+  final double pixelRatio;
+  final Size viewSize;
+
+  const MetaballFABCanvas({
+    super.key,
+    required this.pixelRatio,
+    required this.viewSize,
+  });
+
+  @override
+  State<MetaballFABCanvas> createState() => _MetaballFABCanvasState();
+}
+
+class _MetaballFABCanvasState extends State<MetaballFABCanvas>
     with TickerProviderStateMixin {
   late Offset mainButtonPos;
   late Offset firstButtonPos;
@@ -24,10 +43,9 @@ class _MetaballFABState extends State<MetaballFAB>
   @override
   void initState() {
     super.initState();
-    var screenWidth = (View.of(context).physicalSize.shortestSide /
-        View.of(context).devicePixelRatio);
-    var screenHeight = (View.of(context).physicalSize.longestSide /
-        View.of(context).devicePixelRatio);
+    // TODO: i broke this?
+    var screenWidth = (widget.viewSize.shortestSide / widget.pixelRatio);
+    var screenHeight = (widget.viewSize.longestSide / widget.pixelRatio);
     mainButtonPos = Offset(screenWidth / 2, screenHeight - 100);
     firstButtonPos = Offset(screenWidth / 2, screenHeight - 100);
     secondButtonPos = Offset(screenWidth / 2, screenHeight - 100);

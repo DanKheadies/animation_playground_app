@@ -17,5 +17,7 @@ Map<String, Widget Function(BuildContext)> routes = {
   '/particle-system-with-emitters': (context) =>
       const ParticleSystemWithEmitters(),
   '/painting-with-pixels': (context) => const PaintingWithPixels(),
+  '/language-learning-with-pixels': (context) =>
+      const LanguageLearningWithPixels(),
   '/segmented-bar-flip-animation': (context) => const SegmentedBarFlip(),
 };
