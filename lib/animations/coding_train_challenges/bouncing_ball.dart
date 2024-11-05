@@ -54,22 +54,27 @@ class _BouncingBallState extends State<BouncingBall>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          Transform.translate(
-            offset: Offset(_x, _y),
-            child: Container(
-              height: 30,
-              width: 30,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
+    return GestureDetector(
+      onLongPress: () {
+        Navigator.pushNamed(context, '/');
+      },
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: Stack(
+          children: [
+            Transform.translate(
+              offset: Offset(_x, _y),
+              child: Container(
+                height: 30,
+                width: 30,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
